@@ -18,7 +18,9 @@ library = false
 [dependencies]
 tblite.git = "https://github.com/tblite/tblite"
 tblite.tag = "HEAD"
-stdlib = "*"
+stdlib.git = "https://github.com/fortran-lang/stdlib"
+stdlib.branch = "stdlib-fpm"
+
 
 [dev-dependencies]
 test-drive.git = "https://github.com/fortran-lang/test-drive"

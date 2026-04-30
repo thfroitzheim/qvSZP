@@ -328,7 +328,7 @@ program main
          & unity,gamscal,chiscal,alphascal,q_short,orcainp%efield)
       endif 
    case('eeqbc')
-      call eeqbc(mol, error, q_short)
+      call eeqbc(mol, error, q)
       if (allocated(error)) then
          print '(a)', error%message
          error stop

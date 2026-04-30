@@ -191,7 +191,7 @@ contains
       !> Error handling
       type(error_type), allocatable, intent(out) :: error
       !> Atomic partial charges
-      real(wp), intent(out) :: qvec(:)
+      real(wp), intent(out), contiguous :: qvec(:)
 
       call get_eeqbc_charges(mol, error, qvec)
 

@@ -1,6 +1,5 @@
 module test_qvSZP
    use chargscfcts, only : eeq
-   use stdlib_io, only : getline
    use testdrive, only : error_type, unittest_type, new_unittest, check
    use mstore, only : get_structure
    use mctc_io, only : structure_type, new

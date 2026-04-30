@@ -2,7 +2,6 @@ module ioroutines
    use mctc_io, only: read_structure, structure_type, to_symbol
    use mctc_io_symbols, only: symbol_to_number
    use mctc_env, only: fatal_error, error_type, wp
-   use stdlib_sorting, only: sort_index, int_index
    implicit none
    private
 
@@ -31,7 +30,7 @@ module ioroutines
       integer, allocatable  :: lmax(:) ! total number of primitive functions
       integer, allocatable  :: nfactor(:,:,:) ! total number of primitive functions
       integer, allocatable  :: angmom(:,:) ! angular momentum of each primitive function
-      integer(int_index), allocatable :: sindex(:,:)
+      integer, allocatable :: sindex(:,:)
       real(wp), allocatable :: exp(:,:,:) ! exponent of each primitive function
       real(wp), allocatable :: coeff(:,:,:) ! contraction coefficient of each primitive function
    end type ecp_type
@@ -311,7 +310,7 @@ contains
       integer                                :: iat,imax,ltmp
       integer                                :: i,j,l,imin
 
-      integer(int_index), allocatable        :: sortindex(:)
+      integer, allocatable        :: sortindex(:)
 
       real(wp), allocatable, intent(inout)  :: increment(:)
 
@@ -575,7 +574,7 @@ contains
       integer                                :: iat,imax,ltmp
       integer                                :: i,j,l,imin
 
-      integer(int_index), allocatable        :: sortindex(:)
+      integer, allocatable        :: sortindex(:)
 
       allocate(nbf(118),npr(118,20),angmom(118,20),ncore(118),lmax(118))
 
@@ -932,5 +931,54 @@ contains
       close(myunit3)
 
    end subroutine search_ghost_atoms
+
+
+   !> Explicit replacement for stdlib_sorting:sort_index
+   !>
+   !> Mimics stdlib_sorting:sort_index for default integer arrays:
+   !> - sorts ARRAY in place in non-decreasing order
+   !> - returns IDX such that the sorted ARRAY came from ARRAY_OLD(IDX)
+   !> - stable for equal values
+   subroutine sort_index(array, idx)
+
+      integer, intent(inout) :: array(:)
+      integer, intent(out)   :: idx(:)
+
+      integer :: n
+      integer :: i, j
+      integer :: key_value
+      integer :: key_index
+
+      n = size(array)
+
+      if (size(idx) /= n) then
+         error stop "sort_index: index array has wrong size"
+      end if
+
+      do i = 1, n
+         idx(i) = i
+      end do
+
+      ! Stable insertion sort.
+      ! Sort ARRAY and carry IDX along with it.
+      do i = 2, n
+         key_value = array(i)
+         key_index = idx(i)
+
+         j = i - 1
+         do while (j >= 1)
+            if (array(j) <= key_value) exit
+
+            array(j + 1) = array(j)
+            idx(j + 1) = idx(j)
+            j = j - 1
+         end do
+
+         array(j + 1) = key_value
+         idx(j + 1) = key_index
+      end do
+
+   end subroutine sort_index
+
 
 end module ioroutines

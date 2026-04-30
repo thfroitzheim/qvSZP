@@ -18,8 +18,6 @@ library = false
 [dependencies]
 tblite.git = "https://github.com/tblite/tblite"
 tblite.tag = "HEAD"
-stdlib.git = "https://github.com/fortran-lang/stdlib"
-stdlib.branch = "stdlib-fpm"
 
 
 [dev-dependencies]

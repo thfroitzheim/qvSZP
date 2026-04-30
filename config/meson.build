@@ -127,21 +127,3 @@ tblite_dep = dependency(
   default_options: ['default_library=static', 'api=false'],
 )
 lib_deps += tblite_dep
-
-stdlib_dep = dependency(
-  'fortran_stdlib',
-  fallback: ['fortran_stdlib', 'stdlib_dep'],
-  default_options: ['default_library=static'],
-)
-lib_deps += stdlib_dep
-
-#!> Preparation for subproject inclusion of stdlib
-
-# cmake = import('cmake')
-# cmake_opts = cmake.subproject_options()
-# cmake_opts.add_cmake_defines({'CMAKE_POSITION_INDEPENDENT_CODE': true})
-# sub_proj = cmake.subproject('stdlib') #, options: cmake_opts)
-# stdlib fortran-lang framework 
-# stdlib_dep = sub_proj.dependency(
-# 'fortran_stdlib',
-# )

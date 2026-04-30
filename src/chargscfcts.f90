@@ -6,6 +6,7 @@ module chargscfcts
    use mctc_env, only: i4, wp, error_type, fatal_error
    !> Multicharge modules
    use multicharge_lapack, only : sytrf, sytrs
+   use multicharge, only : get_eeqbc_charges
    !> CEH modules
    use tblite_ceh_ceh, only : new_ceh_calculator
    use tblite_ceh_singlepoint, only : ceh_singlepoint
@@ -19,7 +20,7 @@ module chargscfcts
 
    real(wp), parameter :: kt = 3.166808578545117e-06_wp
 
-   public :: eeq, calcrab, ncoord_basq, extcharges, ceh
+   public :: eeq, eeqbc, calcrab, ncoord_basq, extcharges, ceh
 contains
    subroutine eeq(tmpmol,rab,chrg,cn,orig,scal,scal2,scal3,scal4,q,efield)
       implicit none
@@ -183,6 +184,18 @@ contains
       if(tmpmol%nat .eq. 1) q(1)=chrg
 
    end subroutine eeq
+
+   subroutine eeqbc(mol, error, qvec)
+      !> Molecular structure data
+      type(structure_type),intent(in)  :: mol
+      !> Error handling
+      type(error_type), allocatable, intent(out) :: error
+      !> Atomic partial charges
+      real(wp), intent(out) :: qvec(:)
+
+      call get_eeqbc_charges(mol, error, qvec)
+
+   end subroutine eeqbc
 
    subroutine ceh(mol, efield, q_ceh, error, verbosity)
       !> CEH calculator

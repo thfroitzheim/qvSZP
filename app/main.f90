@@ -3,7 +3,7 @@ program main
    use mctc_env, only: error_type, wp, fatal_error
    use ioroutines, only: rdfile, rdbas, rdecp_default, rdecp_qvSZPs, check_ghost_atoms, &
    & search_ghost_atoms, basis_type, ecp_type
-   use chargscfcts, only: eeq,calcrab,ncoord_basq,extcharges,ceh
+   use chargscfcts, only: eeq,eeqbc,calcrab,ncoord_basq,extcharges,ceh
    use miscellaneous, only: helpf
    use write_output, only: orcaconfig, wrorca
    implicit none
@@ -326,7 +326,13 @@ program main
          endif
          call eeq(molshort,distvec_short,real(charge,wp),cn_short,.False., &
          & unity,gamscal,chiscal,alphascal,q_short,orcainp%efield)
-      endif
+      endif 
+   case('eeqbc')
+      call eeqbc(mol, error, q_short)
+      if (allocated(error)) then
+         print '(a)', error%message
+         error stop
+      end if
     case('ceh_external')
       if (index((filen),'coord').eq.0) then
          call write_structure(mol, 'coord', error)

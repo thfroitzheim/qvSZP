@@ -17,7 +17,7 @@ library = false
 
 [dependencies]
 tblite.git = "https://github.com/tblite/tblite"
-tblite.tag = "v0.4.0"
+tblite.tag = "HEAD"
 stdlib = "*"
 
 [dev-dependencies]
